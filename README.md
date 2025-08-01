@@ -35,3 +35,5 @@ Ce projet est un site web pour un centre de beauté féminin au Maroc (coiffure,
 ```bash
 git clone https://github.com/othmanechaikhi/centre-beaute-maroc.git
 cd centre-beaute-maroc
+<img width="1902" height="873" alt="image" src="https://github.com/user-attachments/assets/075bed4f-eb43-45af-b23a-0dce1b80cb99" />
+
