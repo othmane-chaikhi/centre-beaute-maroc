@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact - Belle Femme{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="section-title">Contactez-nous</h1>
+        <p class="lead text-muted">Nous sommes là pour répondre à toutes vos questions</p>
+    </div>
+    
+    <div class="row">
+        <!-- Contact Info -->
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    {% if contact_info %}
+                    <h5 class="card-title">
+                        <i class="fas fa-map-marker-alt text-primary me-2"></i>Adresse
+                    </h5>
+                    <p>{{ contact_info.address|linebreaks }}</p>
+                    
+                    <h5 class="card-title mt-4">
+                        <i class="fas fa-phone text-primary me-2"></i>Téléphone
+                    </h5>
+                    <p>{{ contact_info.phone }}</p>
+                    
+                    <h5 class="card-title mt-4">
+                        <i class="fas fa-clock text-primary me-2"></i>Heures d'ouverture
+                    </h5>
+                    <p>{{ contact_info.hours|linebreaks }}</p>
+                    {% else %}
+                    <h5 class="card-title">
+                        <i class="fas fa-map-marker-alt text-primary me-2"></i>Adresse
+                    </h5>
+                    <p>123 Rue Mohammed V<br>Casablanca, Maroc</p>
+                    
+                    <h5 class="card-title mt-4">
+                        <i class="fas fa-phone text-primary me-2"></i>Téléphone
+                    </h5>
+                    <p>+212 5XX-XXXXXX</p>
+                    
+                    <h5 class="card-title mt-4">
+                        <i class="fas fa-clock text-primary me-2"></i>Heures d'ouverture
+                    </h5>
+                    <p>
+                        Lundi - Vendredi: 9h00 - 19h00<br>
+                        Samedi: 9h00 - 18h00<br>
+                        Dimanche: Fermé
+                    </p>
+                    {% endif %}
+                    
+                    <div class="mt-4">
+                        <h5>Suivez-nous</h5>
+                        <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="btn btn-outline-primary"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Map -->
+        <div class="col-lg-8 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Notre Localisation</h5>
+                    {% if contact_info.map_embed %}
+                    <div class="map-container" style="height: 400px;">
+                        {{ contact_info.map_embed|safe }}
+                    </div>
+                    {% else %}
+                    <div class="map-container" style="height: 400px; background-color: #f8f9fa; border: 2px dashed #dee2e6; display: flex; align-items: center; justify-content: center;">
+                        <div class="text-center text-muted">
+                            <i class="fas fa-map-marked-alt fa-3x mb-3"></i>
+                            <p>Carte Google Maps à intégrer</p>
+                            <small>Remplacez par le code d'intégration Google Maps</small>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Contact Form -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-envelope me-2"></i>Envoyez-nous un Message</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <form>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="contact_name" class="form-label">Nom *</label>
+                                        <input type="text" class="form-control" id="contact_name" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="contact_phone" class="form-label">Téléphone *</label>
+                                        <input type="tel" class="form-control" id="contact_phone" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="contact_email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="contact_email">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="contact_subject" class="form-label">Sujet</label>
+                                    <select class="form-select" id="contact_subject">
+                                        <option value="">Choisir un sujet...</option>
+                                        <option value="info">Demande d'information</option>
+                                        <option value="appointment">Prise de rendez-vous</option>
+                                        <option value="complaint">Réclamation</option>
+                                        <option value="other">Autre</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="contact_message" class="form-label">Message *</label>
+                                    <textarea class="form-control" id="contact_message" rows="4" required></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane me-1"></i>Envoyer le Message
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <div class="bg-light p-4 rounded h-100">
+                                <h6 class="text-primary mb-3">Informations Importantes</h6>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Réponse garantie sous 24h
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Consultation gratuite par téléphone
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Devis personnalisé sur demande
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="fas fa-check-circle text-success me-2"></i>
+                                        Prise de rendez-vous en ligne 24h/24
+                                    </li>
+                                </ul>
+                                
+                                <div class="mt-4 p-3 bg-white rounded border-start border-primary border-4">
+                                    <h6 class="text-primary">Urgence ?</h6>
+                                    <p class="mb-2">Pour toute urgence, contactez-nous directement :</p>
+                                    <p class="mb-0">
+                                        <i class="fas fa-phone text-primary me-2"></i>
+                                        <strong>{{ contact_info.phone|default:"+212 5XX-XXXXXX" }}</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Review Form -->
+    <div class="row mt-5">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-star text-warning me-2"></i>Laissez un Avis</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'core:add_review' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="review_name" class="form-label">Nom</label>
+                            <input type="text" class="form-control" id="review_name" name="name" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Note</label>
+                            <div class="rating-input">
+                                {% for i in "12345" %}
+                                <input type="radio" name="rating" value="{{ forloop.counter }}" id="star{{ forloop.counter }}" required>
+                                <label for="star{{ forloop.counter }}" class="text-warning">
+                                    <i class="fas fa-star"></i>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="review_comment" class="form-label">Commentaire</label>
+                            <textarea class="form-control" id="review_comment" name="comment" rows="4" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane me-1"></i>Envoyer l'Avis
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Reviews Display -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-comments text-primary me-2"></i>Avis Clients</h5>
+                </div>
+                <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                    {% for review in reviews %}
+                    <div class="mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <strong>{{ review.name }}</strong>
+                            <div class="rating text-warning">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= review.rating %}
+                                        <i class="fas fa-star"></i>
+                                    {% else %}
+                                        <i class="far fa-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p class="mb-1 text-muted small">{{ review.comment }}</p>
+                        <small class="text-muted">{{ review.created_at|date:"d/m/Y" }}</small>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">Aucun avis pour le moment. Soyez le premier à laisser un avis !</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.rating-input {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.rating-input input[type="radio"] {
+    display: none;
+}
+
+.rating-input label {
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #ddd;
+}
+
+.rating-input input[type="radio"]:checked ~ label,
+.rating-input label:hover,
+.rating-input label:hover ~ label {
+    color: #ffc107 !important;
+}
+</style>
+{% endblock %}

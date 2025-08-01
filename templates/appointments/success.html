@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Rendez-vous Confirmé - Belle Femme{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 text-center">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle fa-5x text-success"></i>
+                    </div>
+                    
+                    <h1 class="h2 mb-4">Rendez-vous Enregistré !</h1>
+                    
+                    <p class="lead mb-4">
+                        Merci pour votre demande de rendez-vous. Notre équipe vous contactera dans les plus brefs délais pour confirmer votre créneau.
+                    </p>
+                    
+                    <div class="alert alert-info text-start">
+                        <h6><i class="fas fa-clock me-2"></i>Prochaines étapes :</h6>
+                        <ul class="mb-0">
+                            <li>Nous vous appellerons dans les 24h</li>
+                            <li>Confirmation de votre rendez-vous</li>
+                            <li>Rappel par SMS 24h avant</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'core:home' %}" class="btn btn-primary">
+                            <i class="fas fa-home me-2"></i>Retour à l'Accueil
+                        </a>
+                        <a href="{% url 'services:list' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-list me-2"></i>Voir Nos Services
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

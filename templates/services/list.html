@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Nos Services - Belle Femme{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12 text-center mb-5">
+            <h1 class="section-title">Nos Services</h1>
+            <p class="lead text-muted">Découvrez notre gamme complète de services beauté</p>
+        </div>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                <a href="{% url 'services:list' %}" 
+                   class="btn {% if not selected_category %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                    Tous les Services
+                </a>
+                {% for category in categories %}
+                <a href="{% url 'services:list' %}?category={{ category.id }}" 
+                   class="btn {% if selected_category == category.id %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                    {% if category.icon %}<i class="{{ category.icon }} me-1"></i>{% endif %}
+                    {{ category.name }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="row">
+        {% for service in services %}
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card service-card h-100">
+                <img src="{% if service.image %}{{ service.image.url }}{% else %}https://images.pexels.com/photos/3997989/pexels-photo-3997989.jpeg?auto=compress&cs=tinysrgb&w=400{% endif %}" 
+                     class="card-img-top" alt="{{ service.name }}">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title">{{ service.name }}</h5>
+                        {% if service.is_featured %}
+                            <span class="badge bg-primary">Vedette</span>
+                        {% endif %}
+                    </div>
+                    <p class="card-text text-muted flex-grow-1">{{ service.description }}</p>
+                    
+                    <div class="mt-auto">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="h5 text-primary mb-0">{{ service.price }} MAD</span>
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>{{ service.get_duration_display }}
+                            </small>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'appointments:book_service' service.id %}" 
+                               class="btn btn-primary">
+                                <i class="fas fa-calendar-plus me-1"></i>Réserver
+                            </a>
+                            <a href="{% url 'services:detail' service.id %}" 
+                               class="btn btn-outline-secondary btn-sm">
+                                Plus de détails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <div class="alert alert-info">
+                <h4>Aucun service trouvé</h4>
+                <p>Il n'y a actuellement aucun service dans cette catégorie.</p>
+                <a href="{% url 'services:list' %}" class="btn btn-primary">Voir tous les services</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

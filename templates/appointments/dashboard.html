@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Tableau de Bord - Rendez-vous{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Gestion des Rendez-vous</h1>
+        <a href="/admin/" class="btn btn-outline-primary">Interface Admin</a>
+    </div>
+    
+    <!-- Status Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5>Filtrer par statut</h5>
+            <div class="btn-group" role="group">
+                <a href="{% url 'appointments:dashboard' %}" 
+                   class="btn {% if not selected_status %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                    Tous
+                </a>
+                {% for status_code, status_label in status_choices %}
+                <a href="{% url 'appointments:dashboard' %}?status={{ status_code }}" 
+                   class="btn {% if selected_status == status_code %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                    {{ status_label }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Appointments List -->
+    <div class="row">
+        {% for appointment in appointments %}
+        <div class="col-lg-6 mb-4">
+            <div class="card {% if appointment.is_pending %}border-warning{% endif %}">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">{{ appointment.name }}</h6>
+                    <span class="badge {% if appointment.status == 'pending' %}bg-warning{% elif appointment.status == 'confirmed' %}bg-success{% elif appointment.status == 'cancelled' %}bg-danger{% else %}bg-secondary{% endif %}">
+                        {{ appointment.get_status_display }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Service:</strong><br>
+                            {{ appointment.service.name }}
+                        </div>
+                        <div class="col-6">
+                            <strong>Prix:</strong><br>
+                            {{ appointment.service.price }} MAD
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Date:</strong><br>
+                            {{ appointment.appointment_date|date:"d/m/Y" }}
+                        </div>
+                        <div class="col-6">
+                            <strong>Heure:</strong><br>
+                            {{ appointment.appointment_time|time:"H:i" }}
+                        </div>
+                    </div>
+                    <hr>
+                    <div>
+                        <strong>Contact:</strong><br>
+                        <i class="fas fa-phone me-1"></i>{{ appointment.phone }}<br>
+                        {% if appointment.email %}
+                        <i class="fas fa-envelope me-1"></i>{{ appointment.email }}
+                        {% endif %}
+                    </div>
+                    
+                    {% if appointment.notes %}
+                    <hr>
+                    <div>
+                        <strong>Notes:</strong><br>
+                        {{ appointment.notes }}
+                    </div>
+                    {% endif %}
+                    
+                    <hr>
+                    <div class="d-flex gap-2">
+                        <form method="post" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="appointment_id" value="{{ appointment.id }}">
+                            
+                            {% if appointment.status == 'pending' %}
+                            <button type="submit" name="status" value="confirmed" class="btn btn-success btn-sm">
+                                <i class="fas fa-check me-1"></i>Confirmer
+                            </button>
+                            <button type="submit" name="status" value="cancelled" class="btn btn-danger btn-sm">
+                                <i class="fas fa-times me-1"></i>Annuler
+                            </button>
+                            {% elif appointment.status == 'confirmed' %}
+                            <button type="submit" name="status" value="completed" class="btn btn-primary btn-sm">
+                                <i class="fas fa-check-double me-1"></i>Terminé
+                            </button>
+                            <button type="submit" name="status" value="cancelled" class="btn btn-danger btn-sm">
+                                <i class="fas fa-times me-1"></i>Annuler
+                            </button>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+                <div class="card-footer text-muted small">
+                    Créé le {{ appointment.created_at|date:"d/m/Y à H:i" }}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <h5>Aucun rendez-vous trouvé</h5>
+                <p>Il n'y a actuellement aucun rendez-vous {% if selected_status %}avec le statut "{{ selected_status }}"{% endif %}.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

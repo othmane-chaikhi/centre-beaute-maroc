@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ service.name }} - Belle Femme{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-6">
+            <img src="{% if service.image %}{{ service.image.url }}{% else %}https://images.pexels.com/photos/3997989/pexels-photo-3997989.jpeg?auto=compress&cs=tinysrgb&w=800{% endif %}" 
+                 class="img-fluid rounded shadow" alt="{{ service.name }}">
+        </div>
+        <div class="col-lg-6">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Accueil</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'services:list' %}">Services</a></li>
+                    <li class="breadcrumb-item active">{{ service.name }}</li>
+                </ol>
+            </nav>
+            
+            <div class="d-flex align-items-center mb-3">
+                <h1 class="me-3">{{ service.name }}</h1>
+                {% if service.is_featured %}
+                    <span class="badge bg-primary">Service Vedette</span>
+                {% endif %}
+            </div>
+            
+            <div class="mb-4">
+                <span class="badge bg-light text-dark me-2">
+                    <i class="{{ service.category.icon }} me-1"></i>{{ service.category.name }}
+                </span>
+            </div>
+            
+            <p class="lead">{{ service.description }}</p>
+            
+            <div class="row mb-4">
+                <div class="col-sm-6">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h5 class="text-primary">Prix</h5>
+                            <h3 class="text-primary">{{ service.price }} MAD</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <h5 class="text-secondary">Durée</h5>
+                            <h3 class="text-secondary">{{ service.get_duration_display }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+                <a href="{% url 'appointments:book_service' service.id %}" 
+                   class="btn btn-primary btn-lg">
+                    <i class="fas fa-calendar-plus me-2"></i>Réserver ce Service
+                </a>
+                <a href="{% url 'services:list' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Retour aux Services
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    {% if related_services %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="section-title">Services Similaires</h3>
+        </div>
+        {% for related_service in related_services %}
+        <div class="col-md-4 mb-4">
+            <div class="card service-card">
+                <img src="{% if related_service.image %}{{ related_service.image.url }}{% else %}https://images.pexels.com/photos/3997989/pexels-photo-3997989.jpeg?auto=compress&cs=tinysrgb&w=400{% endif %}" 
+                     class="card-img-top" alt="{{ related_service.name }}">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ related_service.name }}</h5>
+                    <p class="card-text text-muted">{{ related_service.description|truncatewords:10 }}</p>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="h6 text-primary">{{ related_service.price }} MAD</span>
+                        <small class="text-muted">{{ related_service.get_duration_display }}</small>
+                    </div>
+                    <a href="{% url 'services:detail' related_service.id %}" class="btn btn-outline-primary btn-sm">Voir Détails</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

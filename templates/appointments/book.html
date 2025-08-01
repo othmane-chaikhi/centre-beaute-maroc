@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Réserver un Rendez-vous - Belle Femme{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <h1 class="section-title">Réserver un Rendez-vous</h1>
+                <p class="lead text-muted">Choisissez votre service et votre créneau préféré</p>
+            </div>
+            
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Nom Complet *</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Téléphone *</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email (optionnel)</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="service" class="form-label">Service *</label>
+                            <select class="form-select" id="service" name="service" required>
+                                <option value="">Choisir un service...</option>
+                                {% for service in services %}
+                                <option value="{{ service.id }}" 
+                                        {% if selected_service and service.id == selected_service.id %}selected{% endif %}
+                                        data-price="{{ service.price }}" 
+                                        data-duration="{{ service.get_duration_display }}">
+                                    {{ service.name }} - {{ service.price }} MAD ({{ service.get_duration_display }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="appointment_date" class="form-label">Date *</label>
+                                <input type="date" class="form-control" id="appointment_date" 
+                                       name="appointment_date" min="{{ today }}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="appointment_time" class="form-label">Heure *</label>
+                                <select class="form-select" id="appointment_time" name="appointment_time" required>
+                                    <option value="">Choisir une heure...</option>
+                                    <option value="09:00">09:00</option>
+                                    <option value="09:30">09:30</option>
+                                    <option value="10:00">10:00</option>
+                                    <option value="10:30">10:30</option>
+                                    <option value="11:00">11:00</option>
+                                    <option value="11:30">11:30</option>
+                                    <option value="14:00">14:00</option>
+                                    <option value="14:30">14:30</option>
+                                    <option value="15:00">15:00</option>
+                                    <option value="15:30">15:30</option>
+                                    <option value="16:00">16:00</option>
+                                    <option value="16:30">16:30</option>
+                                    <option value="17:00">17:00</option>
+                                    <option value="17:30">17:30</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="notes" class="form-label">Notes supplémentaires</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3" 
+                                      placeholder="Informations supplémentaires, demandes spéciales..."></textarea>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Information:</strong> Votre rendez-vous sera confirmé par téléphone dans les 24h suivant votre demande.
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-calendar-check me-2"></i>Confirmer le Rendez-vous
+                            </button>
+                            <a href="{% url 'services:list' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Retour aux Services
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('service').addEventListener('change', function() {
+    const selectedOption = this.options[this.selectedIndex];
+    if (selectedOption.value) {
+        const price = selectedOption.dataset.price;
+        const duration = selectedOption.dataset.duration;
+        console.log(`Service sélectionné: ${price} MAD, durée: ${duration}`);
+    }
+});
+</script>
+{% endblock %}
